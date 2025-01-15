@@ -98,9 +98,9 @@ in
         Restart = "on-failure";
         User = "bird";
         Group = "bird";
-        ExecStart = "${cfg.package}/bin/bird -c /etc/bird/bird.conf";
-        ExecReload = "${cfg.package}/bin/birdc configure";
-        ExecStop = "${cfg.package}/bin/birdc down";
+        ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird.conf";
+        ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
+        ExecStop = "${lib.getExe' cfg.package "birdc"} down";
         RuntimeDirectory = "bird";
         CapabilityBoundingSet = caps;
         AmbientCapabilities = caps;
