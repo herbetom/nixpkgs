@@ -35,7 +35,7 @@ appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  extraPkgs = pkgs: [ pkgs.hidapi ];
+  extraPkgs = pkgs: [ pkgs.hidapi pkgs.libsecret ];
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
