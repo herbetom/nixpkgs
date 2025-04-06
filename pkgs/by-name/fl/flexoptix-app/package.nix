@@ -6,12 +6,12 @@
 }:
 let
   pname = "flexoptix-app";
-  version = "5.21.2-latest";
+  version = "5.26.0";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
-    url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-BnNRwD09CE1EZDg3Hn3khN4FZ8Hj5LLAunk+NKU5BJo=";
+    url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}-latest.AppImage";
+    hash = "sha256-lEKWFJz0E1y7tbK6bU0wcvVb+njVTsVeXuWsC6oih8M=";
   };
 
   udevRules = fetchurl {
