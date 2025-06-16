@@ -3435,6 +3435,8 @@ with pkgs;
     garage_0_9_4
     garage_1_2_0
     garage_1_x
+    garage_2_0_0
+    garage_2_x
     ;
 
   gauge-unwrapped = callPackage ../development/tools/gauge { };

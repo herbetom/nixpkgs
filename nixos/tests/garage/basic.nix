@@ -8,7 +8,7 @@ args@{ mkNode, ver, ... }:
     };
 
     nodes = {
-      single_node = mkNode { replicationMode = "none"; };
+      single_node = mkNode { replicationFactor = 1; consistencyMode = "consistent"; };
     };
 
     testScript = ''
@@ -18,8 +18,7 @@ args@{ mkNode, ver, ... }:
 
       start_all()
 
-      cur_version_regex = re.compile('Current cluster layout version: (?P<ver>\d*)')
-      key_creation_regex = re.compile('Key name: (?P<key_name>.*)\nKey ID: (?P<key_id>.*)\nSecret key: (?P<secret_key>.*)')
+      cur_version_regex = re.compile(r'Current cluster layout version: (?P<ver>\d*)')
 
       @dataclass
       class S3Key:
@@ -31,6 +30,18 @@ args@{ mkNode, ver, ... }:
       class GarageNode:
          node_id: str
          host: str
+
+      def parse_api_key_data(text) -> S3Key:
+        key_creation_regex = re.compile(r'Key name: \s*(?P<key_name>.*)|' r'Key ID: \s*(?P<key_id>.*)|' r'Secret key: \s*(?P<secret_key>.*)', re.IGNORECASE)
+        fields = {}
+        for match in key_creation_regex.finditer(text):
+          for key, value in match.groupdict().items():
+            if value:
+              fields[key] = value.strip()
+        try:
+          return S3Key(**fields)
+        except TypeError as e:
+          raise ValueError(f"Cannot parse API key data. Missing required field(s): {e}")
 
       def get_node_fqn(machine: Machine) -> GarageNode:
         node_id, host = machine.succeed("garage node id").split('@')
@@ -55,17 +66,11 @@ args@{ mkNode, ver, ... }:
 
       def create_api_key(machine: Machine, key_name: str) -> S3Key:
          output = machine.succeed(f"garage key create {key_name}")
-         m = key_creation_regex.match(output)
-         if not m or not m.group('key_id') or not m.group('secret_key'):
-            raise ValueError('Cannot parse API key data')
-         return S3Key(key_name=key_name, key_id=m.group('key_id'), secret_key=m.group('secret_key'))
+         return parse_api_key_data(output)
 
       def get_api_key(machine: Machine, key_pattern: str) -> S3Key:
          output = machine.succeed(f"garage key info {key_pattern}")
-         m = key_creation_regex.match(output)
-         if not m or not m.group('key_name') or not m.group('key_id') or not m.group('secret_key'):
-             raise ValueError('Cannot parse API key data')
-         return S3Key(key_name=m.group('key_name'), key_id=m.group('key_id'), secret_key=m.group('secret_key'))
+         return parse_api_key_data(output)
 
       def test_bucket_writes(node):
         node.succeed("garage bucket create test-bucket")

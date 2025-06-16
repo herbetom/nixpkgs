@@ -9,7 +9,8 @@ let
   mkNode =
     package:
     {
-      replicationMode,
+      replicationFactor,
+      consistencyMode,
       publicV6Address ? "::1",
     }:
     { pkgs, ... }:
@@ -30,7 +31,8 @@ let
         enable = true;
         inherit package;
         settings = {
-          replication_mode = replicationMode;
+          replication_factor = replicationFactor;
+          consistency_mode = consistencyMode;
 
           rpc_bind_addr = "[::]:3901";
           rpc_public_addr = "[${publicV6Address}]:3901";
@@ -73,4 +75,5 @@ foldl
   { }
   [
     "1_x"
+    "2_x"
   ]
