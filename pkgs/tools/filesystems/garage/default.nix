@@ -122,6 +122,7 @@ rec {
     cargoHash = "sha256-NmeAkm35Su4o5JEn75pZmxhVHh+VMwKwULKY0eCVlYo=";
     cargoPatches = [ ./update-time-0.8.patch ];
     broken = stdenv.hostPlatform.isDarwin;
+    eol = true;
   };
 
   garage_0_9_4 = generic {
@@ -129,6 +130,7 @@ rec {
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
     cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
     cargoPatches = [ ./update-time.patch ];
+    eol = true;
   };
 
   garage_1_2_0 = generic {
