@@ -1,26 +1,32 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   libpcap,
   pkg-config,
   perl,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
   version = "4.99.5";
 
-  src = fetchurl {
-    url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
-    hash = "sha256-jHWFbgCt3urfcNrWfJ/z3TaFNrK4Vjq/aFTXx2TNOts=";
+  src = fetchFromGitHub {
+    owner = "the-tcpdump-group";
+    repo = "tcpdump";
+    rev = "tcpdump-${version}";
+    hash = "sha256-o6WzyfK07E0eyCBttN/3SuR4JcFCRZEuvhmXMOyG/14=";
   };
 
   postPatch = ''
     patchShebangs tests
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   nativeCheckInputs = [ perl ];
 
