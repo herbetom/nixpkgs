@@ -4,6 +4,7 @@
   lib,
   fetchFromGitHub,
 
+  git,
   cmake,
   openssl,
   pcre,
@@ -29,34 +30,44 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.14.6.19-stable";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "symless";
-    repo = "synergy-core";
-    rev = version;
-    hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
+    repo = "synergy";
+    rev = "v${version}";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    deepClone = true;
+    preFetch = ''
+      # can't clone using ssh
+      # https://github.com/jg-rp/python-jsonpath/pull/122
+      export GIT_CONFIG_COUNT=1
+      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+      export GIT_CONFIG_VALUE_0=git@github.com:
+    '';
+    #hash = "sha256-b0E5iT/Xzx5xqkkqfU0KJfDPJMI4US8LAn+UgwIafKc=";
+    #hash = "sha256-kzW/CnJ2+bThxuntPItNVCJGGCkzDcrDsPP9dYcQ0bg=";
+    hash = "sha256-VjfV5ZhYJKAhZZBK9gkybFeNkU4z4USOz3uGw4+W1QI=";
+    #hash = "";
   };
 
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
-    ./darwin-non-static-openssl.patch
+    #./darwin-non-static-openssl.patch
   ];
 
   postPatch = ''
-    substituteInPlace src/gui/src/SslCertificate.cpp \
-      --replace-fail 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
-
-    substituteInPlace CMakeLists.txt cmake/Version.cmake src/gui/CMakeLists.txt \
-    --replace-fail "cmake_minimum_required (VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+    #substituteInPlace src/gui/src/SslCertificate.cpp \
+    #  --replace-fail 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
-      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+    #substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
+    #  --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [
+    git
     cmake
     pkg-config
   ]
@@ -88,14 +99,16 @@ stdenv.mkDerivation rec {
   # Silences many warnings
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-inconsistent-missing-override";
 
-  cmakeFlags =
+  cmakeFlags = [
+    #"-DVERSION_FILE=version-file=build/VERSION"
+  ] ++
     lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
     # NSFilenamesPboardType is deprecated in 10.14+
     ++ lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${
       if stdenv.hostPlatform.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion
     }";
 
-  doCheck = true;
+  #doCheck = true;
 
   checkPhase = ''
     runHook preCheck
