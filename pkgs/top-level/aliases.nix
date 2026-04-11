@@ -1992,6 +1992,8 @@ mapAliases {
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
   tkimg = throw "'tkimg' has been renamed to/replaced by 'tclPackages.tkimg'"; # Converted to throw 2025-10-27
   tlaplusToolbox = tlaplus-toolbox; # Added 2025-08-21
+  tmate = throw "'tmate' has been removed as it is unmaintained"; # Added 2026-04-11
+  tmate-ssh-server = throw "'tmate-ssh-server' has been removed as it is unmaintained"; # Added 2026-04-11
   tokyo-night-gtk = throw "'tokyo-night-gtk' has been renamed to/replaced by 'tokyonight-gtk-theme'"; # Converted to throw 2025-10-27
   tomcat_connectors = throw "'tomcat_connectors' has been renamed to/replaced by 'apacheHttpdPackages.mod_jk'"; # Converted to throw 2025-10-27
   tooling-language-server = deputy; # Added 2025-06-22

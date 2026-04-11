@@ -1420,7 +1420,6 @@
   ./services/networking/tinc.nix
   ./services/networking/tinydns.nix
   ./services/networking/tinyproxy.nix
-  ./services/networking/tmate-ssh-server.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
