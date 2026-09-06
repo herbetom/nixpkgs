@@ -438,7 +438,7 @@ rec {
               versionModule
               ./maintainers/scripts/incus/incus-virtual-machine-image.nix
             ];
-          }).config.system.build.qemuImage
+          }).config.system.build.repartImage
         )
       );
 
