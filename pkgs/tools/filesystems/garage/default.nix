@@ -4,6 +4,7 @@
   fetchFromGitea,
   fetchpatch2,
   installShellFiles,
+  libsodium,
   openssl,
   pkg-config,
   protobuf,
@@ -30,7 +31,7 @@ let
         domain = "git.deuxfleurs.fr";
         owner = "Deuxfleurs";
         repo = "garage";
-        rev = "v${version}";
+        tag = "v${version}";
         inherit hash;
       };
 
@@ -43,6 +44,7 @@ let
       ];
 
       buildInputs = [
+        libsodium
         openssl
       ];
 
@@ -50,7 +52,10 @@ let
         cacert
       ];
 
-      env.OPENSSL_NO_VENDOR = true;
+      env = {
+        OPENSSL_NO_VENDOR = true;
+        SODIUM_USE_PKG_CONFIG = true;
+      };
 
       # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.3.0/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
