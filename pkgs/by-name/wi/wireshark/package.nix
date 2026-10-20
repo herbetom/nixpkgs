@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  nix-update-script,
 
   asciidoctor,
   bcg729,
@@ -221,6 +222,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $out/lib/wireshark/plugins $out/Applications/Wireshark.app/Contents/PlugIns/wireshark
     cp -r $out/libexec/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Powerful network protocol analyzer";
