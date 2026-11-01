@@ -1011,6 +1011,7 @@ mapAliases {
   garage_0_9_4 = throw "'garage_0_9_4' has been removed as it is unmaintained upstream"; # Added 2025-09-16
   garage_1_2_0 = throw "'garage_1_2_0' has been removed. Use 'garage_1' instead."; # Added 2025-09-16
   garage_1_x = warnAlias "'garage_1_x' has been renamed to 'garage_1'" garage_1; # Added 2025-06-23
+  garage = warnAlias "'garage' has been an alias for 'garage_1'." garage_1; # Added 2026-11-01
   garage_2_0_0 = throw "'garage_2_0_0' has been removed. Use 'garage_2' instead."; # Added 2025-09-16
   garmintools = throw "'garmintools' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   gavrasm = throw "'gavrasm' has been removed. Use 'avra' instead."; # Added 2025-12-21
