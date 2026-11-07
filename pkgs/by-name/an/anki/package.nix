@@ -9,6 +9,7 @@
   lame,
   mpv-unwrapped,
   ninja,
+  pkg-config,
   callPackage,
   nixosTests,
   nodejs,
@@ -74,6 +75,7 @@ let
       pluggy
       setuptools
       trove-classifiers
+      tomlkit
 
       # transitive deps
       asgiref
@@ -177,6 +179,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     uv
     cargo
     installShellFiles
