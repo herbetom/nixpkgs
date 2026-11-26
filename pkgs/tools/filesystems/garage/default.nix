@@ -23,6 +23,7 @@ let
       cargoPatches ? [ ],
       eol ? false,
       broken ? false,
+      problems ? { },
     }:
     rustPlatform.buildRustPackage {
       pname = "garage";
@@ -110,6 +111,7 @@ let
           herbetom
         ];
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
+        problems = problems;
         inherit broken;
         mainProgram = "garage";
         platforms = lib.platforms.linux;
@@ -121,6 +123,7 @@ rec {
     version = "1.3.1";
     hash = "sha256-wkCnJmbulnhzwHvzdpzh9MRceOzmPdhOogffwhqNGPg=";
     cargoHash = "sha256-jfYe2A6zkVgTLrWBDbahICSKCRO3FwsBPNSVFapH0Rs=";
+    problems.removal.message = "garage_1 is EOL. Please plan your migration to garage_2: https://garagehq.deuxfleurs.fr/documentation/working-documents/migration-2/";
   };
 
   garage_2 = generic {
